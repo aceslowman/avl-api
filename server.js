@@ -28,7 +28,7 @@ router.route('/dictionary/words')
 
   // train system on a new set of words (accessed at POST http://localhost:8080/api/dictionary/words)
   .post(function(req, res) {
-    Word.train(req.param('source_text'),function(err, response){
+    Word.train(req.body.source,function(err, response){
       if(err){ res.send(err) }
       res.send(response);
     });

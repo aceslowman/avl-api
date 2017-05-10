@@ -28,7 +28,8 @@ schema.statics.train = function(source_text, callback){
     });
 
     fs.readFile(path.join(assets_path,'english_graphemes.json'), 'utf8', function (err, data) {
-      if (err){ console.log(err) };
+      if (err)
+        console.log(err);
 
       graphemes = JSON.parse(data);
 
@@ -38,8 +39,7 @@ schema.statics.train = function(source_text, callback){
     //   });
 
       var splitString = source_text.toLowerCase().split(' ');
-
-
+      
       for(var i = 0; i < splitString.length; i++){
 
         var word_obj = {"word":splitString[i]};
@@ -77,50 +77,10 @@ schema.statics.train = function(source_text, callback){
         }, function(err) {
           console.log(err);
         });
-
       }
+    });
 
-      // lineReader.on('line', function (line) {
-      //   var word_obj = {"word":line};
-      //
-      //   word_obj.breakdown = [];
-      //   for(var key in graphemes){
-      //     var regexp = new RegExp(key, "g");
-      //     while ((key = regexp.exec(line)) != null) {
-      //       word_obj.breakdown.push(
-      //         {
-      //           "index":key["index"],
-      //           "grapheme":key[0],
-      //           "phonemes":graphemes[key]
-      //         });
-      //     }
-      //   }
-      //
-      //   word_obj.breakdown.sort(function (a, b) {
-      //     return a.index - b.index;
-      //   });
-      //
-      //   var word = new Word(word_obj);
-      //   var promise = new Promise(function(resolve, reject) {
-      //     word.save(function (err, word) {
-      //       if (err){
-      //         reject(Error("Save error: " + err));
-      //       }else{
-      //         resolve("The word \""+word.word + "\" was saved to DB!");
-      //       }
-      //     });
-      //   });
-      //
-      //   promise.then(function(result) {
-      //     console.log(result);
-      //   }, function(err) {
-      //     console.log(err);
-      //   });
-      //
-      // });
-
-      callback(null,true);
-    }); //end of readfile
+    callback(null,true);
 }
 
 module.exports = mongoose.model('Word', schema);
