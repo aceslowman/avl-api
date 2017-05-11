@@ -16,31 +16,31 @@ avl is hopefully going to be a generative language library. The intended series 
 
 ### dictionary
 
-`api/dictionary/words`
+#### `api/dictionary/words`
 
 * **GET:**
   * Returns a full collection of all words in the current dictionary.
 * **POST:**
   * Accepts a body of text, which will build the current dictionary.
 
-`api/dictionary/word/{word}`
+#### `api/dictionary/word/{word}`
 
 * **GET:**
   * an individual word from the dictionary, as well as it's breakdown.
 
-`api/dictionary/graphemes`
+#### `api/dictionary/graphemes`
 
 * **POST:**
   * Provide the dictionary with the appropriate grapheme map
 
 ### create
 
-`api/create/word`
+#### `api/create/word`
 
 * **GET:**
   * Returns a new word using the procedure above.
 
-`api/create/words/{#number}`
+#### `api/create/words/{#number}`
 
 * **GET:**
   * Returns a number of words based on the procedure.
@@ -49,12 +49,12 @@ avl is hopefully going to be a generative language library. The intended series 
     * Average word length
     * Average sentence length
 
-`api/create/paragraph`
+#### `api/create/paragraph`
 
 * **GET:**
   * Returns a paragraph using all new words.
 
-`api/create/book/{pages}`
+#### `api/create/book/{pages}`
 
 * **GET:**
   * Returns a lot of text, with however many pages specified.

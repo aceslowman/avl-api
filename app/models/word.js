@@ -16,6 +16,38 @@ var schema = mongoose.Schema({
   ]
 });
 
+schema.statics.create = function(callback){
+  var Word = mongoose.model('Word', schema);
+  var current_word;
+  // Person.
+  //   find({ occupation: /host/ }).
+  //   where('name.last').equals('Ghost').
+  //   where('age').gt(17).lt(66).
+  //   where('likes').in(['vaporizing', 'talking']).
+  //   limit(10).
+  //   sort('-occupation').
+  //   select('name occupation').
+  //   exec(callback);
+
+  // get a random word
+  Word.aggregate({ $sample: { size: 1 } } , function(err, res){
+    current_word = res[0];
+
+    current_grapheme = current_word.breakdown[0];
+
+
+    console.log(current_grapheme);
+
+    callback(null,current_grapheme);
+  });
+  //pick it's first grapheme
+
+  //find a new word that begins at that grapheme
+
+
+
+}
+
 schema.statics.train = function(source_text, callback){
     var Word = mongoose.model('Word', schema);
 
@@ -39,7 +71,7 @@ schema.statics.train = function(source_text, callback){
     //   });
 
       var splitString = source_text.toLowerCase().split(' ');
-      
+
       for(var i = 0; i < splitString.length; i++){
 
         var word_obj = {"word":splitString[i]};
@@ -80,7 +112,7 @@ schema.statics.train = function(source_text, callback){
       }
     });
 
-    callback(null,true);
+    callback(err,true);
 }
 
 module.exports = mongoose.model('Word', schema);

@@ -42,6 +42,18 @@ router.route('/dictionary/words')
     });
   });
 
+router.route('/create/word')
+
+  //get a newly created word
+  .get(function(req, res) {
+    Word.create(function(err, word){
+      if(err){ res.send(err) }
+      res.json(word);
+    });
+  });
+
+
+
 app.use('/api', router);
 
 router.get('/', function(req, res) {
