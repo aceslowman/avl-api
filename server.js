@@ -24,9 +24,18 @@ router.use(function(req, res, next) {
   next();
 });
 
+/**
+  #### `api/dictionary/words`
+
+  * **GET:**
+    * Returns a full collection of all words in the current dictionary.
+  * **POST:**
+    * Accepts a body of text, which will build the current dictionary.
+**/
+
 router.route('/dictionary/words')
 
-  // train system on a new set of words (accessed at POST http://localhost:8080/api/dictionary/words)
+  // train system on a new set of words (accessed at POST http://localhost:2000/api/dictionary/words)
   .post(function(req, res) {
     Word.train(req.body.source,function(err, response){
       if(err){ res.send(err) }
@@ -34,13 +43,39 @@ router.route('/dictionary/words')
     });
   })
 
-  // get all the words (accessed at GET http://localhost:8080/api/dictionary/words)
+  // get all the words (accessed at GET http://localhost:2000/api/dictionary/words)
   .get(function(req, res) {
     Word.find(function(err, words) {
       if (err){ res.send(err) }
       res.json(words);
     });
   });
+
+/**
+  #### `api/dictionary/word/{word}`
+
+  * **GET:**
+    * an individual word from the dictionary, as well as it's breakdown.
+**/
+
+router.route('/dictionary/words/:word')
+
+  // get the document that matches the word. (GET http://localhost:2000/api/dictionary/words/WORD)
+  .get(function(req, res) {
+    Word.find({word: req.params.word}, function(err,word){
+      if(err){
+        res.send(err);
+      }
+      res.json(word);
+    });
+  });
+
+/**
+  #### `api/create/word`
+
+  * **GET:**
+    * Returns a new word using the procedure above.
+**/
 
 router.route('/create/word')
 
