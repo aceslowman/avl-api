@@ -18,33 +18,47 @@ var schema = mongoose.Schema({
 
 schema.statics.create = function(callback){
   var Word = mongoose.model('Word', schema);
-  var current_word;
-  // Person.
-  //   find({ occupation: /host/ }).
-  //   where('name.last').equals('Ghost').
-  //   where('age').gt(17).lt(66).
-  //   where('likes').in(['vaporizing', 'talking']).
-  //   limit(10).
-  //   sort('-occupation').
-  //   select('name occupation').
-  //   exec(callback);
+  var current_word, current_grapheme;
 
-  // get a random word
-  Word.aggregate({ $sample: { size: 1 } } , function(err, res){
-    current_word = res[0];
+  // #1 retrieve a random word.
+  var getRandom = new Promise(function(resolve, reject) {
+    Word.aggregate({ $sample: { size: 1 } } , function(err, res){
+      if(err){ reject("Failed to find a random word."); }
 
-    current_grapheme = current_word.breakdown[0];
-
-
-    console.log(current_grapheme);
-
-    callback(null,current_grapheme);
+      // set the current word to the random word
+      current_word     = res[0];
+      // and grab the first random grapheme from it
+      current_grapheme = current_word.breakdown[0];
+      console.log("Word found: " + current_word.word);
+      resolve("Random Word: " + current_word.word);
+    });
   });
-  //pick it's first grapheme
 
-  //find a new word that begins at that grapheme
+  // #2 find the next word that has a matching grapheme.
+  // retrieve and return the grapheme that follows the match
+  var findNext = new Promise(function(resolve, reject){
+    //search for any word containing the current_grapheme in it's breakdown
+    Word.find({ 'breakdown.grapheme': current_grapheme }, function(err, match){
+      // once it's found, update both current_word, and current_grapheme
+      current_word = match;
+      // current_grapheme = match.
 
+      console.log("Next match: " + match);
+      resolve("move on");
+    });
+  });
 
+  // step through the algorithm using promises
+  getRandom             // #1
+    .then(findNext)     // #2
+
+    .then(function() {  // END
+      callback(null, current_word);
+    },
+    function(err) {
+      console.log(err);
+      callback(err, null);
+    });
 
 }
 
